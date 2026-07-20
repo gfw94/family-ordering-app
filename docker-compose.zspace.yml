@@ -7,7 +7,9 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./:/workspace/app
+      - ./app:/workspace/app
       - ./data:/workspace/data
-    command: >
-      sh -lc "mkdir -p /workspace/data && python /workspace/app/backend/server.py --host 0.0.0.0 --port 8000 --db /workspace/data/main.db"
+    environment:
+      GITHUB_ZIP_URL: https://github.com/gfw94/family-ordering-app/archive/refs/heads/main.zip
+    command: |
+      sh -lc "set -eu; mkdir -p /workspace/app /workspace/data; python -c \"import os, pathlib, shutil, tempfile, urllib.request, zipfile; app_dir=pathlib.Path('/workspace/app'); source_url=os.environ['GITHUB_ZIP_URL']; temp_path=pathlib.Path(tempfile.mkdtemp()); zip_path=temp_path / 'repo.zip'; extract_dir=temp_path / 'extract'; urllib.request.urlretrieve(source_url, zip_path); zipfile.ZipFile(zip_path).extractall(extract_dir); source_root=next(extract_dir.iterdir()); shutil.rmtree(app_dir, ignore_errors=True); app_dir.mkdir(parents=True, exist_ok=True); shutil.copytree(source_root, app_dir, dirs_exist_ok=True)\"; python /workspace/app/backend/server.py --host 0.0.0.0 --port 8000 --db /workspace/data/main.db"

@@ -1,0 +1,34 @@
+services:
+  family-ordering:
+    build:
+      context: .
+    image: family-ordering:public
+    container_name: family-ordering
+    restart: unless-stopped
+    volumes:
+      - ./data:/data
+    expose:
+      - "8000"
+    command: >
+      sh -lc "mkdir -p /data && python backend/server.py --host 0.0.0.0 --port 8000 --db /data/main.db"
+
+  caddy:
+    image: caddy:2
+    container_name: family-ordering-proxy
+    restart: unless-stopped
+    depends_on:
+      - family-ordering
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      APP_DOMAIN: ${APP_DOMAIN}
+      CADDY_EMAIL: ${CADDY_EMAIL}
+    volumes:
+      - ./Caddyfile.public:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:

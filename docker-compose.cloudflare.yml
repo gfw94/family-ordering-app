@@ -1,0 +1,22 @@
+services:
+  family-ordering:
+    build:
+      context: .
+    image: family-ordering:cloudflare
+    container_name: family-ordering
+    restart: unless-stopped
+    volumes:
+      - ./data:/data
+    expose:
+      - "8000"
+    command: >
+      sh -lc "mkdir -p /data && python backend/server.py --host 0.0.0.0 --port 8000 --db /data/main.db"
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: family-ordering-tunnel
+    restart: unless-stopped
+    depends_on:
+      - family-ordering
+    command: >
+      tunnel --no-autoupdate --url http://family-ordering:8000

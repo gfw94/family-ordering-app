@@ -1,0 +1,9 @@
+{$APP_DOMAIN} {
+  encode zstd gzip
+
+  reverse_proxy family-ordering:8000
+
+  tls {
+    email {$CADDY_EMAIL}
+  }
+}

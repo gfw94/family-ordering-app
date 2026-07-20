@@ -1,0 +1,10 @@
+.git
+.gitignore
+__pycache__/
+backend/__pycache__/
+data/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.zip

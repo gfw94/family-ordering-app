@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>家庭点菜站</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-kicker">HOME KITCHEN</div>
+          <h1>家庭点菜站</h1>
+          <p>给家里人一个能看时间、看菜、下单和管理订单的小网页。</p>
+        </div>
+
+        <div id="userSummary" class="user-summary hidden"></div>
+
+        <nav id="nav" class="nav hidden">
+          <button class="nav-link active" data-view="dashboard">首页</button>
+          <button class="nav-link" data-view="menu">点菜</button>
+          <button class="nav-link" data-view="orders">我的订单</button>
+          <button class="nav-link admin-only" data-view="admin">管理后台</button>
+        </nav>
+
+        <button id="logoutButton" class="ghost-button hidden">退出登录</button>
+      </aside>
+
+      <main class="main-content">
+        <section id="loginView" class="view active"></section>
+        <section id="dashboardView" class="view hidden"></section>
+        <section id="menuView" class="view hidden"></section>
+        <section id="ordersView" class="view hidden"></section>
+        <section id="adminView" class="view hidden"></section>
+      </main>
+    </div>
+
+    <dialog id="orderDialog" class="order-dialog">
+      <form method="dialog" class="dialog-card">
+        <div id="orderDialogBody"></div>
+      </form>
+    </dialog>
+
+    <script src="./app.js"></script>
+  </body>
+  </html>

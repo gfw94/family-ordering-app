@@ -3,7 +3,7 @@ import json
 import sqlite3
 from datetime import datetime
 from http import HTTPStatus
-from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+from http.server import HTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
@@ -132,7 +132,7 @@ def main():
     db_path = Path(args.db).resolve()
     ensure_database(db_path)
     AppHandler.db_path = db_path
-    server = ThreadingHTTPServer((args.host, args.port), AppHandler)
+    server = HTTPServer((args.host, args.port), AppHandler)
     print(f'Serving on http://{args.host}:{args.port}')
     print(f'Using SQLite database: {db_path}')
     try:

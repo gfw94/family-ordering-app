@@ -11,6 +11,7 @@ from urllib.parse import parse_qs, urlparse
 ROOT_DIR = Path(__file__).resolve().parents[1]
 DEFAULT_DB_PATH = ROOT_DIR / 'data' / 'main.db'
 SCHEMA_PATH = Path(__file__).resolve().with_name('schema.sql')
+BUILD_MARKER = 'github-sync-2026-07-20'
 
 
 def sanitize_room_key(room_key: str) -> str:
@@ -41,7 +42,7 @@ class AppHandler(SimpleHTTPRequestHandler):
     def do_GET(self):
         parsed = urlparse(self.path)
         if parsed.path == '/api/health':
-            self._send_json({'ok': True, 'dbPath': str(self.db_path)})
+            self._send_json({'ok': True, 'dbPath': str(self.db_path), 'buildMarker': BUILD_MARKER})
             return
         if parsed.path == '/api/state':
             self._handle_get_state(parsed)
@@ -135,6 +136,7 @@ def main():
     server = HTTPServer((args.host, args.port), AppHandler)
     print(f'Serving on http://{args.host}:{args.port}')
     print(f'Using SQLite database: {db_path}')
+    print(f'Build marker: {BUILD_MARKER}')
     try:
       server.serve_forever()
     except KeyboardInterrupt:
